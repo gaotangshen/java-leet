@@ -31,7 +31,7 @@
   //           hm.get(node).neighbors.add(hm.get(aneighbor));
   //       }
   //   }
-public class Solution {
+// public class Solution {
     // public void dfs(UndirectedGraphNode node,HashMap<UndirectedGraphNode,UndirectedGraphNode> hm){
     //     for(UndirectedGraphNode aneighbor: node.neighbors){ 
     //         if(!hm.containsKey(aneighbor)){
@@ -53,28 +53,32 @@ public class Solution {
     //     dfs(node,hm);
     //     return head;
     // }
-    public UndirectedGraphNode dfs(UndirectedGraphNode node,HashMap<UndirectedGraphNode,UndirectedGraphNode> hm){
-        UndirectedGraphNode n = new UndirectedGraphNode(node.label);
-        hm.put(node, n);
-        for(UndirectedGraphNode aneighbor: node.neighbors){ 
-            if(!hm.containsKey(aneighbor)){
-                UndirectedGraphNode newneighbor = new UndirectedGraphNode(aneighbor.label);
-                hm.put(aneighbor,newneighbor);
-                dfs(aneighbor,hm);
-            }
-            n.neighbors.add(hm.get(aneighbor));
-        }
-        return n;
-
-    }
+// }
+public class Solution {
     public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
-        if(node == null)
+
+        if(node==null){
             return null;
-        // UndirectedGraphNode head = new UndirectedGraphNode(node.label);
-        HashMap<UndirectedGraphNode,UndirectedGraphNode> hm = new HashMap<UndirectedGraphNode,UndirectedGraphNode>();
-        // hm.put(node, head);
-        UndirectedGraphNode head = dfs(node,hm);
+        }
+        
+        HashMap<UndirectedGraphNode,UndirectedGraphNode> hm= new HashMap<UndirectedGraphNode,UndirectedGraphNode>();
+        UndirectedGraphNode head = BFS(node,hm);
         return head;
     }
-
+    public UndirectedGraphNode BFS(UndirectedGraphNode node,HashMap<UndirectedGraphNode,UndirectedGraphNode> hm){
+        UndirectedGraphNode n = new UndirectedGraphNode(node.label);
+        hm.put(node,n);
+        for(UndirectedGraphNode aneighbor : node.neighbors){
+            if(!hm.containsKey(aneighbor)){
+                // UndirectedGraphNode newneighbor = new UndirectedGraphNode(aneighbor.label);
+                // hm.put(aneighbor,newneighbor);
+                n.neighbors.add(BFS(aneighbor,hm));
+            }else{
+                n.neighbors.add(hm.get(aneighbor));
+            }
+            
+        }
+        return n;
+    }
 }
+
