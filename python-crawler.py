@@ -31,7 +31,8 @@ class Spider_Model:
     # 将所有的段子都扣出来，添加到列表中并且返回列表  
     def GetPage(self,page): 
         
-        myUrl = "http://m.qiushibaike.com/hot/page/" + page   
+        # myUrl = "http://m.qiushibaike.com/hot/page/" + page  
+        myUrl = "http://www.fmylife.com/?page="+page 
         user_agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64)'
         headers = { 'User-Agent' : user_agent } 
         req = urllib.request.Request(myUrl,headers = headers) 
@@ -45,15 +46,17 @@ class Spider_Model:
         else:
             print("connect success")
         myPage = myResponse.read()  
+        # print(myPage)
         #encode的作用是将unicode编码转换成其他编码的字符串  
         #decode的作用是将其他编码的字符串转换成unicode编码  
         unicodePage = myPage.decode("utf-8")  
         # 找出所有class="content"的div标记  
         #re.S是任意匹配模式，也就是.可以匹配换行符  
-        myItems = re.findall('<div.*?class="content">(.*?)<!--[0-9]+-->.*?</div>',unicodePage,re.S)  
+        myItems = re.findall(r'<div.*?class="post article".*?><p>(.*?)</p>.*?</div>',unicodePage,re.S)  
 
         items = []  
-        for item in myItems: 
+        for item in myItems:
+            item = re.sub("<[^<]*>","",item);
             # item 中第一个是div的标题，也就是时间  
             # item 中第二个是div的内容，也就是内容  
             items.append(item.replace("\n",""))  
